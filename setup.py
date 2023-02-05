@@ -34,7 +34,7 @@ setup(
     data_files=[("config.sample.ini", ["config.sample.ini"])],
     entry_points={
         "console_scripts": [
-            "smartmeter=smartmeter.main:main",
+            "smartmeter=smartmeter.main:run",
         ],
     },
     project_urls={

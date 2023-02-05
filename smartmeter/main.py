@@ -78,7 +78,8 @@ async def dispatcher(
             await asyncio.sleep(0.1)
 
 
-if __name__ == "__main__":
+def run() -> None:
+    """Run the app."""
     args = parse_cli(sys.argv[1:])
     config = load_config(args.configfile)
     msg_q = mp.Queue()
@@ -150,3 +151,7 @@ if __name__ == "__main__":
     #     asyncio.ensure_future(display)
 
     eventloop.run_forever()
+
+
+if __name__ == "__main__":
+    run()
