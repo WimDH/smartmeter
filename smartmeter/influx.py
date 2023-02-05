@@ -4,7 +4,7 @@ from smartmeter.digimeter import convert_timestamp
 from time import monotonic
 import logging
 
-LOG = logging.getLogger()
+LOG = logging.getLogger("main")
 
 
 class DbInflux:

@@ -6,7 +6,7 @@ from time import monotonic, sleep
 from smartmeter.digimeter import FIELDS
 import logging
 
-LOG = logging.getLogger()
+LOG = logging.getLogger("main")
 FIELDNAMES = [f[1] for f in FIELDS]
 WIP_PREFIX = ".wip__"
 

@@ -9,7 +9,7 @@ from smartmeter.digimeter import read_serial, fake_serial
 from smartmeter.influx import DbInflux
 from smartmeter.csv_writer import CSVWriter
 
-LOG = logging.getLogger()
+LOG = logging.getLogger("main")
 
 
 def not_on_a_pi():
@@ -90,6 +90,7 @@ if __name__ == "__main__":
         keep=int(config["logging"]["keep"]),
         size=config["logging"]["size"],
         loglevel=config["logging"]["loglevel"],
+        name="main"
     )
 
     log.info("--- Start ---")
