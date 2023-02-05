@@ -42,8 +42,8 @@ def start_serial_reader(
         msg_q=msg_q,
         port=cfg.get("port"),
         baudrate=cfg.getint("baudrate"),
-        bytesize=cfg.get("bytesize"),
-        parity=cfg.getint("parity"),
+        bytesize=cfg.getint("bytesize"),
+        parity=cfg.get("parity"),
         stopbits=cfg.getint("stopbits"),
     )
 
