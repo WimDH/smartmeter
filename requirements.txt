@@ -1,0 +1,6 @@
+coloredlogs
+crccheck
+pyserial
+python-dateutil
+influxdb_client
+aiohttp
