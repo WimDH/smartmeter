@@ -47,7 +47,7 @@ class CSVWriter:
                 WIP_PREFIX
                 + self.prefix
                 + "_"
-                + datetime.now().strftime("%Y%M%d%H%M%S")
+                + datetime.now().strftime("%Y%m%d%H%M%S")
                 + ".csv",
             )
             target_filename = os.path.join(
