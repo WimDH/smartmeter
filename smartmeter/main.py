@@ -74,7 +74,7 @@ async def dispatcher(
                 await asyncio.sleep(0.1)
 
         except Exception:
-            log.exception("Unexpected error in the dispatcher!")
+            LOG.exception("Unexpected error in the dispatcher!")
             await asyncio.sleep(0.1)
 
 
