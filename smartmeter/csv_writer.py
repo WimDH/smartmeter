@@ -51,12 +51,15 @@ class CSVWriter:
                 + ".csv",
             )
             target_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
             )
             if not os.path.exists(target_filename):
                 return filename
             else:
-                LOG.warning("File %s already exists, waiting 1 sec. to generate new name.", filename)
+                LOG.warning(
+                    "File %s already exists, waiting 1 sec. to generate new name.",
+                    filename,
+                )
                 sleep(1)
 
     def open(self) -> None:
@@ -101,7 +104,7 @@ class CSVWriter:
             os.unlink(filename)
         else:
             new_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
             )
             LOG.debug("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)

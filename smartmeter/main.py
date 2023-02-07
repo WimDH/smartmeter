@@ -5,9 +5,16 @@ import logging
 from smartmeter.utils import parse_cli, load_config, init_logging, update_log_config
 import multiprocessing as mp
 import configparser
+from typing import Optional
 from smartmeter.digimeter import read_serial, fake_serial
 from smartmeter.influx import DbInflux
 from smartmeter.csv_writer import CSVWriter
+from smartmeter.aux import LoadManager, Display, Buttons
+
+try:
+    import gpiozero as gpio
+except ImportError:
+    pass
 
 LOG = logging.getLogger("main")
 
@@ -48,11 +55,30 @@ def start_serial_reader(
     )
 
 
-async def dispatcher(
-    msg_q: mp.Queue,
-    influx: DbInflux,
-    csv_writer: CSVWriter
-) -> None:
+async def display() -> None:
+    """
+    Display data when the info button is pressed,
+    """
+    disp = Display()
+    bttns = Buttons()
+    activated = False
+
+    while True:
+        try:
+            if bttns.info_button.is_pressed and not activated:
+                activated = True
+                LOG.debug("Info button is pressed.")
+                await disp.cycle()
+                activated = False
+
+        except Exception:
+            LOG.exception("Uncaught exception in display co routine!")
+            activated = False
+
+        await asyncio.sleep(0.1)
+
+
+async def dispatcher(msg_q: mp.Queue, influx: Optional[DbInflux], csv_writer: Optional[CSVWriter], loads: Optional[LoadManager]) -> None:
     """
     Dispatcher gets data from the queue and feeds it to
     the different tasks.
@@ -91,7 +117,7 @@ def run() -> None:
         keep=int(config["logging"]["keep"]),
         size=config["logging"]["size"],
         loglevel=config["logging"]["loglevel"],
-        name="main"
+        name="main",
     )
 
     log.info("--- Start ---")
@@ -100,6 +126,8 @@ def run() -> None:
         log.warning(
             "It seems we are not running on a Raspberry PI! Some data is mocked!"
         )
+
+    LOG.info("Board info: {}".format(str(gpio.pi_info())))
 
     if not args.fake_serial:
         serial_reader = mp.Process(
@@ -144,11 +172,19 @@ def run() -> None:
             write_every=cfg.getint("write_every", 1),
         )
 
-    eventloop = asyncio.get_event_loop()
-    asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer))
+    # Get all the loads from the configfile.
+    # Load sections start with 'load:'
+    load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
+    if load_cfg:
+        loads = LoadManager()
+        LOG.info("Adding the loads to the loadmanager.")
+        [loads.add_load(l) for l in load_cfg]
 
-    # if not not_on_a_pi():
-    #     asyncio.ensure_future(display)
+    eventloop = asyncio.get_event_loop()
+    asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, loads))
+    
+    if not not_on_a_pi():
+        asyncio.ensure_future(display)
 
     eventloop.run_forever()
 

@@ -41,12 +41,19 @@ class DbInflux:
         """
         Write a telegram to an influx bucket.
         """
-        if monotonic() - self.last_upload_time < self.upload_interval or len(self.batch) == 0:
+        if (
+            monotonic() - self.last_upload_time < self.upload_interval
+            or len(self.batch) == 0
+        ):
             self.batch.append(self.craft_json(data))
-            LOG.debug("Adding datapoints to batch (contains %d datapoints).", len(self.batch))
+            LOG.debug(
+                "Adding datapoints to batch (contains %d datapoints).", len(self.batch)
+            )
             return
 
-        LOG.debug("Writing %d datapoint(s) to InfluxDB at %s", len(self.batch), self.url)
+        LOG.debug(
+            "Writing %d datapoint(s) to InfluxDB at %s", len(self.batch), self.url
+        )
         async with InfluxDBClientAsync(
             url=self.url,
             token=self.token,

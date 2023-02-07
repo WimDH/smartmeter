@@ -2,7 +2,7 @@ import re
 import os
 import argparse
 import configparser
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict, Any
 import logging
 from logging.handlers import RotatingFileHandler
 from coloredlogs import ColoredFormatter
@@ -120,3 +120,20 @@ def update_log_config(
 
     config["merged"] = cfg_dict
     return config["merged"]
+
+
+class Borg:
+    """A Borg Singleton."""
+
+    _shared_state: Dict = {}
+
+    def __init__(self) -> None:
+        self.__dict__ = self._shared_state
+
+
+class Status(Borg):
+    """An object to cache the latest meter data, various states and measured values."""
+
+    def __init__(self, data: Any) -> None:
+        Borg.__init__(self)
+        self.data = data

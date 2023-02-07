@@ -194,9 +194,7 @@ def read_serial(
                     LOG.debug("End of message deteced.")
                     telegram_count += 1
                     start_of_telegram_detected = False
-                    LOG.debug(
-                        "Recorded a new telegram: %s", telegram.decode("ascii")
-                    )
+                    LOG.debug("Recorded a new telegram: %s", telegram.decode("ascii"))
 
                     if check_msg(telegram):
                         # If the CRC is correct, add it to the queue.
@@ -226,7 +224,7 @@ def read_serial(
             ):
                 LOG.info(
                     "Received %d telegrams from the digital meter in the last minute.",
-                    telegram_count - telegram_pointer
+                    telegram_count - telegram_pointer,
                 )
                 telegram_pointer = telegram_count
                 telegram_last_time = int(time.monotonic())
