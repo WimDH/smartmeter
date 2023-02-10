@@ -173,6 +173,7 @@ def run() -> None:
         )
 
     # Get all the loads from the configfile.
+    loads = []
     # Load sections start with 'load:'
     # load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
     # if load_cfg:
