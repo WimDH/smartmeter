@@ -3,7 +3,7 @@ import os
 from typing import Optional, Union
 from datetime import datetime
 from time import monotonic, sleep
-from smartmeter.digimeter import FIELDS
+from smartmeter.digimeter import FIELDS, convert_timestamp
 import logging
 
 LOG = logging.getLogger("main")
@@ -126,6 +126,10 @@ class CSVWriter:
             # Remove the local timestamp field, as it is not used in the CSV files.
             if "local_timestamp" in telegram.keys():
                 del telegram["local_timestamp"]
+
+            telegram["timestamp_iso"] = convert_timestamp(telegram["timestamp"])
+            telegram["gas_timestamp_iso"] = convert_timestamp(telegram["gas_timestamp"])
+
             self.batch.append(telegram)
 
         if len(self.batch) < self.write_every and flush is False:

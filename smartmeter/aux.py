@@ -119,7 +119,7 @@ class LoadManager:
         Add a managed load.
         The default aux load (load:aux) is connected to pin GPIO24
 
-        TODO: add other loads, the ones who connect over wifi or bluetooth.
+        TODO: add support for other loads, that can connect over wifi or bluetooth.
         """
         if not load_config.getboolean("enabled", False):
             LOG.info("Load {} is not enabled.".format(load_config.name))
