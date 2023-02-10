@@ -8,8 +8,6 @@ import logging
 
 LOG = logging.getLogger("main")
 FIELDNAMES = [f[1] for f in FIELDS] + ["timestamp_iso", "gas_timestamp_iso"]
-# Remove the local timestamp field, as it is not used in the CSV files.
-del FIELDNAMES["local_timestamp"]
 WIP_PREFIX = ".wip__"
 
 
@@ -123,8 +121,9 @@ class CSVWriter:
         Write a telegram to the CSV file.
         TODO: Handle disk full/permission denied.
         """
-
         if telegram:
+            # Remove the local timestamp field, as it is not used in the CSV files.
+            del telegram["local_timestamp"]
             telegram["timestamp_iso"] = convert_timestamp(telegram["timestamp"])
             telegram["gas_timestamp_iso"] = convert_timestamp(telegram["gas_timestamp"])
 
