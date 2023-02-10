@@ -7,7 +7,9 @@ from smartmeter.digimeter import FIELDS, convert_timestamp
 import logging
 
 LOG = logging.getLogger("main")
-FIELDNAMES = [f[1] for f in FIELDS]
+FIELDNAMES = [f[1] for f in FIELDS] + ["timestamp_iso", "gas_timestamp_iso"]
+# Remove the local timestamp field, as it is not used in the CSV files.
+del FIELDNAMES["local_timestamp"]
 WIP_PREFIX = ".wip__"
 
 
@@ -51,7 +53,7 @@ class CSVWriter:
                 + ".csv",
             )
             target_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
             if not os.path.exists(target_filename):
                 return filename
@@ -123,10 +125,6 @@ class CSVWriter:
         """
 
         if telegram:
-            # Remove the local timestamp field, as it is not used in the CSV files.
-            if "local_timestamp" in telegram.keys():
-                del telegram["local_timestamp"]
-
             telegram["timestamp_iso"] = convert_timestamp(telegram["timestamp"])
             telegram["gas_timestamp_iso"] = convert_timestamp(telegram["gas_timestamp"])
 
