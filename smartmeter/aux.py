@@ -114,6 +114,11 @@ class LoadManager:
     def __init__(self) -> None:
         self.load_list = []
 
+    @property
+    def load_cnt(self):
+        """Return the number of loads found in the loadmanager."""
+        return len(self.load_list)
+
     def add_load(self, load_config: configparser.SectionProxy) -> None:
         """
         Add a managed load.
