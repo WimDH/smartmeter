@@ -174,18 +174,18 @@ def run() -> None:
 
     # Get all the loads from the configfile.
     loads = []
-    # Load sections start with 'load:'
-    # load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
-    # if load_cfg:
-    #     loads = LoadManager()
-    #     LOG.info("Adding the loads to the loadmanager.")
-    #     [loads.add_load(l) for l in load_cfg]
+    #Load sections start with 'load:'
+    load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
+    if load_cfg:
+        loads = LoadManager()
+        LOG.info("Adding the loads to the loadmanager.")
+        [loads.add_load(l) for l in load_cfg]
 
     eventloop = asyncio.get_event_loop()
     asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, loads))
 
-#    if not not_on_a_pi():
-#        asyncio.ensure_future(display)
+    if not not_on_a_pi():
+        asyncio.ensure_future(display)
 
     eventloop.run_forever()
 
