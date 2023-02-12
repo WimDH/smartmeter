@@ -126,20 +126,24 @@ class LoadManager:
 
         TODO: add support for other loads, that can connect over wifi or bluetooth.
         """
-        if not load_config.getboolean("enabled", False):
-            LOG.info("Load {} is not enabled.".format(load_config.name))
+        try:
+            if not load_config.getboolean("enabled", False):
+                LOG.info("Load {} is not enabled.".format(load_config.name))
 
-        LOG.info("Added load {}.".format(load_config.name))
-        self.load_list.append(
-            Load(
-                name=load_config.name[5:],
-                address=load_config.get("address", None),
-                max_power=load_config.getint("max_power"),
-                switch_on=load_config.getint("switch_on"),
-                switch_off=load_config.getint("switch_off"),
-                hold_timer=load_config.getint("hold_timer"),
+            LOG.info("Added load {}.".format(load_config.name))
+            self.load_list.append(
+                Load(
+                    name=load_config.name[5:],
+                    address=load_config.get("address", None),
+                    max_power=load_config.getint("max_power"),
+                    switch_on=load_config.getint("switch_on"),
+                    switch_off=load_config.getint("switch_off"),
+                    hold_timer=load_config.getint("hold_timer"),
+                )
             )
-        )
+
+        except Exception:
+            LOG.critical("Error adding load {}", load_config.name[5:])
 
     def process(self, data: Dict) -> Dict:
         """
