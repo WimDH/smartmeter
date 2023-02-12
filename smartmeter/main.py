@@ -185,7 +185,7 @@ def run() -> None:
     asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, loads))
 
     if not not_on_a_pi():
-       asyncio.ensure_future(display())
+       asyncio.ensure_future(Display())
 
     eventloop.run_forever()
 
