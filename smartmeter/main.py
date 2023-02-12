@@ -180,7 +180,6 @@ def run() -> None:
         loads = LoadManager()
         LOG.info("Adding the loads to the loadmanager.")
         [loads.add_load(l) for l in load_cfg]
-    log.info("{} Loads are discovered in the logfile.", len(loads.load_cnt))
 
     eventloop = asyncio.get_event_loop()
     asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, loads))
