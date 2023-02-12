@@ -75,7 +75,7 @@ class CSVWriter:
         filename = self._generate_filename()
         LOG.info("Creating CSV file %s", format(filename))
         self.filehandler = open(filename, "w")
-        self.dictwriter = csv.DictWriter(self.filehandler, fieldnames=FIELDNAMES, quoting=csv.QUOTE_MINIMAL)
+        self.dictwriter = csv.DictWriter(self.filehandler, fieldnames=FIELDNAMES, quoting=csv.QUOTE_ALL)
         self.dictwriter.writeheader()
         self.lines_written = 0
         self.create_time = monotonic()
