@@ -74,7 +74,6 @@ def convert_timestamp(timestamp: str, format: Optional[str] = None) -> str:
         raise ValueError("Timestamp cannot be empty.")
 
     tz_hour_map = {"S": "02:00", "W": "01:00"}
-    tz_name_map = {"S": "CEST", "W": "CET"}
     year = "20" + timestamp[0:2]
     month = timestamp[2:4]
     day = timestamp[4:6]
@@ -82,12 +81,11 @@ def convert_timestamp(timestamp: str, format: Optional[str] = None) -> str:
     minute = timestamp[8:10]
     second = timestamp[10:12]
     tz_hours = tz_hour_map[timestamp[-1]]
-    tz_name = tz_name_map[timestamp[-1]]
 
     if format == "iso8601":
         result = f"{year}-{month}-{day}T{hour}:{minute}:{second}+{tz_hours}"
     else:
-        result = f"{year}-{month}-{day} {hour}:{minute}:{second} {tz_name}"
+        result = f"{year}-{month}-{day} {hour}:{minute}:{second}"
 
     LOG.debug("Converted timestamp from %s to %s", timestamp, result)
 
