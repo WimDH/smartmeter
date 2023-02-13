@@ -104,7 +104,7 @@ class CSVWriter:
             os.unlink(filename)
         else:
             new_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
             LOG.debug("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)
@@ -132,6 +132,7 @@ class CSVWriter:
         if len(self.batch) < self.write_every and flush is False:
             return
 
+        LOG.info("Writing %s rows to the CSV file.", len(self.batch))
         self.open()
         while self.batch:
             self.dictwriter.writerow(self.batch.pop())
