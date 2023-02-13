@@ -63,29 +63,35 @@ def calculate_timestamp_drift(ts_type: str, iso_8601_timestamp: str) -> int:
     return delta_seconds
 
 
-def convert_timestamp(timestamp: str) -> str:
+def convert_timestamp(timestamp: str, format: Optional[str] = None) -> str:
     """
-    Convert a timestamp in the for of '211024195235S' in iso8601 format.
+    Convert a timestamp in the for of '211024195235S' in iso8601 format or
+    CET/CEST format
     YYMMDDHHMMSS[WS]
     Last letter can be a S (summer) or a W (winter).
     """
     if timestamp == "":
         raise ValueError("Timestamp cannot be empty.")
 
-    tz_map = {"S": "02:00", "W": "01:00"}
+    tz_hour_map = {"S": "02:00", "W": "01:00"}
+    tz_name_map = {"S": "CEST", "W": "CET"}
     year = "20" + timestamp[0:2]
     month = timestamp[2:4]
     day = timestamp[4:6]
     hour = timestamp[6:8]
     minute = timestamp[8:10]
     second = timestamp[10:12]
-    tz = tz_map[timestamp[-1]]
+    tz_hours = tz_hour_map[timestamp[-1]]
+    tz_name = tz_name_map[timestamp[-1]]
 
-    iso8601_timestamp = f"{year}-{month}-{day}T{hour}:{minute}:{second}+{tz}"
+    if format == "iso8601":
+        result = f"{year}-{month}-{day}T{hour}:{minute}:{second}+{tz_hours}"
+    else:
+        result = f"{year}-{month}-{day} {hour}:{minute}:{second} {tz_name}"
 
-    LOG.debug("Converted timestamp from %s to %s", timestamp, iso8601_timestamp)
+    LOG.debug("Converted timestamp from %s to %s", timestamp, result)
 
-    return iso8601_timestamp
+    return result
 
 
 def parse(raw_msg):

@@ -77,7 +77,7 @@ class DbInflux:
         e_data = {
             "measurement": "electricity",
             "tags": {},
-            "time": convert_timestamp(data.get("timestamp", "")),
+            "time": convert_timestamp(data.get("timestamp", ""), format="iso8601"),
             "fields": {
                 key: value
                 for (key, value) in data.items()
@@ -90,7 +90,7 @@ class DbInflux:
         g_data = {
             "measurement": "gas",
             "tags": {},
-            "time": convert_timestamp(data.get("gas_timestamp", "")),
+            "time": convert_timestamp(data.get("gas_timestamp", ""), format="iso8601"),
             "fields": {
                 key: value
                 for (key, value) in data.items()
@@ -103,7 +103,7 @@ class DbInflux:
         l_data = {
             "measurement": "load",
             "tags": {},
-            "time": convert_timestamp(data.get("timestamp", "")),
+            "time": convert_timestamp(data.get("timestamp", ""), format="is8601"),
             "fields": {"load_on": data.get("load_status", 0)},
         }
         LOG.debug("Load data point: %s", l_data)
