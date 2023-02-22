@@ -124,8 +124,8 @@ class CSVWriter:
         if telegram:
             # Remove the local timestamp field, as it is not used in the CSV files.
             del telegram["local_timestamp"]
-            telegram["timestamp"] = convert_timestamp(telegram["timestamp"])
-            telegram["gas_timestamp"] = convert_timestamp(telegram["gas_timestamp"])
+            telegram["timestamp"] = convert_timestamp(telegram["timestamp"], format="iso8601")
+            telegram["gas_timestamp"] = convert_timestamp(telegram["gas_timestamp"], format="iso8601")
 
             self.batch.append(telegram)
 

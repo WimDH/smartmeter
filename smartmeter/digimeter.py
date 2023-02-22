@@ -69,6 +69,8 @@ def convert_timestamp(timestamp: str, format: Optional[str] = None) -> str:
     CET/CEST format
     YYMMDDHHMMSS[WS]
     Last letter can be a S (summer) or a W (winter).
+
+    format: None | iso8601
     """
     if timestamp == "":
         raise ValueError("Timestamp cannot be empty.")
