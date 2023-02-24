@@ -71,7 +71,9 @@ def copy_file_to_bucket(file: str, endpoint: str, access_key: str, secret_key: s
 
     try:
         mc.fput_object(bucket_name, filename, file)
+        LOG.debug("Copy done.")
         os.unlink(file)
+        LOG.debug("Deleted local file.")
 
     except minio.S3Error as err:
         LOG.error("Could not copy %s: %s", filename, err)
@@ -93,6 +95,7 @@ def main() -> None:
     files = glob.glob(os.path.join(args.source_dir, args.file_pattern))
 
     for file in files:
+        LOG.info("Copying file %s", file)
         copy_file_to_bucket(file, args.hostname, access_key, secret_key, args.bucket)
 
 
