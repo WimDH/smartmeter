@@ -209,7 +209,9 @@ def read_serial(
                         queue_data = parse(telegram.decode())
                         calculate_timestamp_drift(
                             "Electricity",
-                            convert_timestamp(queue_data.get("timestamp"), format="iso8601"),
+                            convert_timestamp(
+                                queue_data.get("timestamp"), format="iso8601"
+                            ),
                         )
                         LOG.debug("Adding parsed data to the queue.")
                         msg_q.put(queue_data)

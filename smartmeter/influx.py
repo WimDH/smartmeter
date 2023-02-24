@@ -51,9 +51,7 @@ class DbInflux:
             )
             return
 
-        LOG.info(
-            "Writing %d datapoint(s) to InfluxDB at %s", len(self.batch), self.url
-        )
+        LOG.info("Writing %d datapoint(s) to InfluxDB at %s", len(self.batch), self.url)
         async with InfluxDBClientAsync(
             url=self.url,
             token=self.token,

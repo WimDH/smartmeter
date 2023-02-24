@@ -78,7 +78,12 @@ async def display() -> None:
         await asyncio.sleep(0.1)
 
 
-async def dispatcher(msg_q: mp.Queue, influx: Optional[DbInflux], csv_writer: Optional[CSVWriter], loads: Optional[LoadManager]) -> None:
+async def dispatcher(
+    msg_q: mp.Queue,
+    influx: Optional[DbInflux],
+    csv_writer: Optional[CSVWriter],
+    loads: Optional[LoadManager],
+) -> None:
     """
     Dispatcher gets data from the queue and feeds it to
     the different tasks.

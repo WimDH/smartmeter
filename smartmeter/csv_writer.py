@@ -7,7 +7,9 @@ from smartmeter.digimeter import FIELDS, convert_timestamp
 import logging
 
 LOG = logging.getLogger("main")
-FIELDNAMES = ["timestamp", "gas_timestamp"] + [f[1] for f in FIELDS if 'timestamp' not in f[1]]
+FIELDNAMES = ["timestamp", "gas_timestamp"] + [
+    f[1] for f in FIELDS if "timestamp" not in f[1]
+]
 WIP_PREFIX = ".wip__"
 
 
@@ -51,7 +53,7 @@ class CSVWriter:
                 + ".csv",
             )
             target_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
             )
             if not os.path.exists(target_filename):
                 return filename
@@ -75,7 +77,9 @@ class CSVWriter:
         filename = self._generate_filename()
         LOG.info("Creating CSV file %s", format(filename))
         self.filehandler = open(filename, "w")
-        self.dictwriter = csv.DictWriter(self.filehandler, fieldnames=FIELDNAMES, quoting=csv.QUOTE_MINIMAL)
+        self.dictwriter = csv.DictWriter(
+            self.filehandler, fieldnames=FIELDNAMES, quoting=csv.QUOTE_MINIMAL
+        )
         self.dictwriter.writeheader()
         self.lines_written = 0
         self.create_time = monotonic()
@@ -104,7 +108,7 @@ class CSVWriter:
             os.unlink(filename)
         else:
             new_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
             )
             LOG.debug("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)
@@ -124,8 +128,12 @@ class CSVWriter:
         if telegram:
             # Remove the local timestamp field, as it is not used in the CSV files.
             del telegram["local_timestamp"]
-            telegram["timestamp"] = convert_timestamp(telegram["timestamp"], format="iso8601")
-            telegram["gas_timestamp"] = convert_timestamp(telegram["gas_timestamp"], format="iso8601")
+            telegram["timestamp"] = convert_timestamp(
+                telegram["timestamp"], format="iso8601"
+            )
+            telegram["gas_timestamp"] = convert_timestamp(
+                telegram["gas_timestamp"], format="iso8601"
+            )
 
             self.batch.append(telegram)
 
