@@ -3,11 +3,7 @@ import argparse
 import sys
 import glob
 import os
-import logging
-from coloredlogs import ColoredFormatter
 import minio
-
-LOG = logging.getLogger()
 
 
 def parse_cli(cli_args: List) -> argparse.Namespace:
@@ -40,70 +36,41 @@ def parse_cli(cli_args: List) -> argparse.Namespace:
 
     return parser.parse_args(cli_args)
 
-
-def init_logging(verbosity_level: int) -> None:
-    """Setup the logging to stdout."""
-    if verbosity_level > 3:
-        verbosity_level = 3
-    elif verbosity_level == 0:
-        verbosity_level = 1
-
-    level = [logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG]
-
-    logger = logging.getLogger()
-    logger.setLevel(level[verbosity_level])
-    console_handler = logging.StreamHandler()
-    log_fmt = "%(asctime)s %(levelname)s- %(message)s"
-
-    # If we're in an interactive terminal or not.
-    if os.isatty(sys.stdout.fileno()):
-        console_handler.setFormatter(ColoredFormatter(log_fmt))
-    else:
-        console_handler.setFormatter(logging.Formatter(log_fmt))
-
-    logger.addHandler(console_handler)
-
-
 def copy_file_to_bucket(file: str, endpoint: str, access_key: str, secret_key: str, bucket_name: str) -> None:
     """Copy the file to the bucket."""
-    LOG.debug("Copy file %s", file)
+    print("Copy file %s", file)
 
     _, filename = os.path.split(file)
     mc = minio.Minio(endpoint, access_key, secret_key, secure=True)
 
     try:
         mc.fput_object(bucket_name, filename, file)
-        LOG.debug("Copy done.")
+        print("Copy done.")
         os.unlink(file)
-        LOG.debug("Deleted local file.")
+        print("Deleted local file.")
 
     except minio.S3Error as err:
-        LOG.error("Could not copy %s: %s", filename, err)
+        print("Could not copy %s: %s", filename, err)
 
 
 def main() -> None:
     """Entrypoint"""
     args = parse_cli(sys.argv[1:])
-    init_logging(args.verbosity_level)
     access_key = os.environ.get("SMARTMETER_ACCESS_KEY")
     secret_key = os.environ.get("SMARTMETER_SECRET_KEY")
 
     if not access_key or not secret_key:
-        LOG.error(
+        print(
             "Set the environment variables SMARTMETER_ACCESS_KEY and SMARTMETER_SECRET_KEY!"
         )
         sys.exit(1)
 
-    LOG.info("-- Start --")
-
     files = glob.glob(os.path.join(args.source_dir, args.file_pattern))
 
     for file in files:
-        LOG.debug("Copying file %s", file)
+        print("Copying file %s", file)
         copy_file_to_bucket(file, args.hostname, access_key, secret_key, args.bucket)
 
-    LOG.info("-- Done copying %s file(s) --", len(files))
-    print("blah")
     sys.stdout.flush()
 
 
