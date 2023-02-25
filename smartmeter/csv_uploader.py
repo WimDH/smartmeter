@@ -43,15 +43,15 @@ def parse_cli(cli_args: List) -> argparse.Namespace:
 
 def init_logging(verbosity_level: int) -> None:
     """Setup the logging to stdout."""
-    if verbosity_level > 4:
-        verbosity_level = 4
+    if verbosity_level > 3:
+        verbosity_level = 3
     elif verbosity_level == 0:
         verbosity_level = 1
 
     level = [logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG]
 
     logger = logging.getLogger()
-    logger.setLevel(level[verbosity_level] - 1)
+    logger.setLevel(level[verbosity_level])
     console_handler = logging.StreamHandler()
     log_fmt = "%(asctime)s %(levelname)s- %(message)s"
 
