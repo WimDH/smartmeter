@@ -36,9 +36,10 @@ def parse_cli(cli_args: List) -> argparse.Namespace:
 
     return parser.parse_args(cli_args)
 
+
 def copy_file_to_bucket(file: str, endpoint: str, access_key: str, secret_key: str, bucket_name: str) -> None:
     """Copy the file to the bucket."""
-    print("Copy file %s", file)
+    print("Copy file %s" % file)
 
     _, filename = os.path.split(file)
     mc = minio.Minio(endpoint, access_key, secret_key, secure=True)
@@ -50,7 +51,7 @@ def copy_file_to_bucket(file: str, endpoint: str, access_key: str, secret_key: s
         print("Deleted local file.")
 
     except minio.S3Error as err:
-        print("Could not copy %s: %s", filename, err)
+        print("Could not copy %s: %s" % (filename, err))
 
 
 def main() -> None:
@@ -67,10 +68,12 @@ def main() -> None:
 
     files = glob.glob(os.path.join(args.source_dir, args.file_pattern))
 
+    print("Start")
     for file in files:
-        print("Copying file %s", file)
+        print("Copying file %s" % file)
         copy_file_to_bucket(file, args.hostname, access_key, secret_key, args.bucket)
 
+    print("Done. Copied %s files." % len(files))
     sys.stdout.flush()
 
 
