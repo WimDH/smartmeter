@@ -43,13 +43,13 @@ def parse_cli(cli_args: List) -> argparse.Namespace:
 
 def init_logging(verbosity_level: int) -> None:
     """Setup the logging to stdout."""
-    if verbosity_level > 3:
-        verbosity_level = 3
+    if verbosity_level > 4:
+        verbosity_level = 4
 
     level = [logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG]
 
     logger = logging.getLogger()
-    logger.setLevel(level[verbosity_level])
+    logger.setLevel(level[verbosity_level] - 1)
     console_handler = logging.StreamHandler()
     log_fmt = "%(asctime)s %(levelname)s- %(message)s"
 
@@ -92,11 +92,17 @@ def main() -> None:
         )
         sys.exit(1)
 
+    LOG.info("-- Start --")
+
     files = glob.glob(os.path.join(args.source_dir, args.file_pattern))
 
     for file in files:
-        LOG.info("Copying file %s", file)
+        LOG.debug("Copying file %s", file)
         copy_file_to_bucket(file, args.hostname, access_key, secret_key, args.bucket)
+
+    LOG.info("-- Done copying %s file(s) --", len(files))
+
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":
