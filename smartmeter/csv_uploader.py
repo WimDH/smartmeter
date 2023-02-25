@@ -45,6 +45,8 @@ def init_logging(verbosity_level: int) -> None:
     """Setup the logging to stdout."""
     if verbosity_level > 4:
         verbosity_level = 4
+    elif verbosity_level == 0:
+        verbosity_level = 1
 
     level = [logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG]
 
@@ -101,7 +103,7 @@ def main() -> None:
         copy_file_to_bucket(file, args.hostname, access_key, secret_key, args.bucket)
 
     LOG.info("-- Done copying %s file(s) --", len(files))
-
+    print("blah")
     sys.stdout.flush()
 
 
