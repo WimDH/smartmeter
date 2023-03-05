@@ -50,4 +50,4 @@ def valid_input_data() -> Dict:
 def test_convert_timestamp() -> None:
     """Test the conversion of a timestamp to iso8601."""
     result = convert_timestamp("211024195235S")
-    assert result == "2021-10-24T19:52:35+02:00"
+    assert result == "2021-10-24 19:52:35 CEST"

@@ -35,7 +35,7 @@ setup(
     entry_points={
         "console_scripts": [
             "smartmeter=smartmeter.main:run",
-            "csv_upload=smartmeter.csv_uploader:main"
+            "csv_upload=smartmeter.csv_uploader:main",
         ],
     },
     project_urls={

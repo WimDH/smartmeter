@@ -60,8 +60,3 @@ def test_convert_from_human_readable_fail() -> None:
 def test_autoformat(in_value, out_value) -> None:
     """Test the autoformat function."""
     assert autoformat(in_value) == out_value
-
-
-def test_update_log_config() -> None:
-    """"""
-    raise NotImplementedError

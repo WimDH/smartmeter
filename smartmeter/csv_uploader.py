@@ -37,7 +37,9 @@ def parse_cli(cli_args: List) -> argparse.Namespace:
     return parser.parse_args(cli_args)
 
 
-def copy_file_to_bucket(file: str, endpoint: str, access_key: str, secret_key: str, bucket_name: str) -> None:
+def copy_file_to_bucket(
+    file: str, endpoint: str, access_key: str, secret_key: str, bucket_name: str
+) -> None:
     """Copy the file to the bucket."""
     print("Copy file %s" % file)
 

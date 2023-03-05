@@ -1,7 +1,7 @@
 import configparser
 import logging
 from typing import Optional, Dict
-from time import time
+from time import monotonic
 from xmlrpc.client import Boolean
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
@@ -28,8 +28,6 @@ class Load:
     """
     Defines a load.
     For Pin numbering: https://gpiozero.readthedocs.io/en/stable/recipes.html#pin-numbering
-
-    switch_threshold is expressed in percent and represents the amount of power that has to come from the solar panels.
     """
 
     def __init__(
@@ -37,7 +35,6 @@ class Load:
         name: str,
         max_power: int,
         switch_on: int,
-        switch_off: int,
         hold_timer: int,
         address: Optional[str] = None,
     ) -> None:
@@ -53,7 +50,6 @@ class Load:
         self.name = name
         self.max_power = max_power
         self.switch_on = switch_on
-        self.switch_off = switch_off
         self.hold_timer = hold_timer
         self.state_start_time: Optional[float] = None
 
@@ -70,12 +66,12 @@ class Load:
 
     def on(self) -> None:
         """Switches the load on (set the pin high."""
-        self.state_start_time = time()
+        self.state_start_time = monotonic()
         self._load.on()
 
     def off(self) -> None:
         """Switches the load on (set the pin high."""
-        self.state_start_time = time()
+        self.state_start_time = monotonic()
         self._load.off()
 
     @property
@@ -97,7 +93,7 @@ class Load:
         return self.max_power
 
     @property
-    def state_time(self):
+    def state_time(self) -> int:
         """
         Count how many seconds we are in a stable state (on of off).
         Return -1 if the state is not defined yet.
@@ -105,7 +101,33 @@ class Load:
         if self.state_start_time is None:
             return -1
 
-        return int(time() - self.state_start_time)
+        return int(monotonic() - self.state_start_time)
+
+    def process(self, injected: int, consumed: int) -> bool:
+        """
+        Process the load. Switch the load based on injected or consumed power.
+        Return the load state.
+        """
+        switch_off = 100  # watt
+
+        if (
+            self.is_off
+            and injected >= self.max_power
+            and (
+                self.state_time is not None
+                and self.state_time > self.hold_timer
+            )
+        ):
+            self.on()
+
+        elif (
+            self.is_on
+            and consumed > switch_off
+            and self.state_time > self.hold_timer
+        ):
+            self.off()
+
+        return self.is_on
 
 
 class LoadManager:
@@ -136,7 +158,6 @@ class LoadManager:
                 address=load_config.get("address", None),
                 max_power=load_config.getint("max_power"),
                 switch_on=load_config.getint("switch_on"),
-                switch_off=load_config.getint("switch_off"),
                 hold_timer=load_config.getint("hold_timer"),
             )
         )
@@ -145,34 +166,14 @@ class LoadManager:
         """
         Process the data coming from the digital meter, and switch the loads if needed.
         Return the status for each load.
-        TODO: define an order of switching on and off for all the loads
+        TODO: define an order for switching all the loads
         """
         load_status = {}
+
         for load in self.load_list:
-            actual_injected = data.get("actual_total_injection", 0) * 1000
-            actual_consumed = data.get("actual_total_consumption", 0) * 1000
-
-            if (
-                load.is_off
-                and actual_injected > load.switch_on
-                and (load.state_time is not None and load.state_time > load.hold_timer)
-            ):
-                load.on()
-                continue
-
-            if (
-                load.is_on
-                and load.state_timer > load.hold_timer
-                and (
-                    load.switch_off < 0
-                    and actual_injected < abs(load.switch_off)
-                    or load.switch_off >= 0
-                    and actual_consumed < abs(load.switch_off)
-                )
-            ):
-                load.off()
-
-            load_status[load.name] = load.is_on
+            injected = data.get("actual_total_injection", 0) * 1000
+            consumed = data.get("actual_total_consumption", 0) * 1000
+            load_status[load.name] = load.process(injected, consumed)
 
         return load_status
 
