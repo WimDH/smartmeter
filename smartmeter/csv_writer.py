@@ -95,7 +95,6 @@ class CSVWriter:
         if flush is True and len(self.batch) > 0:
             LOG.debug("Writing the remainder of the rows.")
             self.write(flush=True)
-            return
 
         filename = self.filename
         LOG.debug("Closing file {}.".format(self.filename))
@@ -108,7 +107,7 @@ class CSVWriter:
             os.unlink(filename)
         else:
             new_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
             LOG.debug("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)
@@ -140,7 +139,6 @@ class CSVWriter:
         if len(self.batch) < self.write_every and flush is False:
             return
 
-        LOG.info("Writing %s rows to the CSV file.", len(self.batch))
         self.open()
         while self.batch:
             self.dictwriter.writerow(self.batch.pop())
@@ -150,5 +148,6 @@ class CSVWriter:
                 self.max_age + self.create_time <= monotonic()
                 or self.lines_written == self.max_lines
             ):
+                LOG.info("%s Lines written to CSV file.", self.lines_written)
                 self.close()
                 return
