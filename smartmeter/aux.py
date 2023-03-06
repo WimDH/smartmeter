@@ -61,7 +61,6 @@ class Load:
         1 if the load is on.
         """
         state: str = "ON" if self._load.value == 1 else "OFF"
-        LOG.debug(f"{self.name} on GPIO pin {self.gpio_pin} is {state}.")
         return self._load.value
 
     def on(self) -> None:
@@ -118,6 +117,10 @@ class Load:
                 and self.state_time > self.hold_timer
             )
         ):
+            LOG.info(
+                "Switching load %s ON (Injected power: %s, state timer: %s, hold timer: %s)",
+                     self.name, injected, self.state_time, self.hold_timer
+            )
             self.on()
 
         elif (
@@ -125,6 +128,10 @@ class Load:
             and consumed > switch_off
             and self.state_time > self.hold_timer
         ):
+            LOG.info(
+                "Switching load %s OFF (Consumed power: %s, state timer: %s, hold timer: %s)",
+                     self.name, consumed, self.state_time, self.hold_timer
+            )
             self.off()
 
         return self.is_on
