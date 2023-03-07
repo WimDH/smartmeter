@@ -100,7 +100,6 @@ class CSVWriter:
         filename = self.filename
         LOG.debug("Closing file {}.".format(self.filename))
         self.filehandler.close()
-        self.filehandler = None
         # If no rows have been written to the file, we can remove it.
         if self.lines_written == 0:
             LOG.debug(
