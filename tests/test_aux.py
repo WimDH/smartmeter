@@ -19,7 +19,7 @@ def test_load_status(result):
     )
 
     load.on() if result is True else load.off
-    assert load.status == (1 if result else 0)
+    assert load.status == ("ON" if result else "OFF")
     assert load.is_on == result
     assert load.is_off is not result
 

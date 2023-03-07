@@ -74,6 +74,7 @@ class CSVWriter:
         if self.filehandler and not self.filehandler.closed:
             return
 
+        LOG.debug("Current CSV file is %s", self.filehandler)
         filename = self._generate_filename()
         LOG.info("Creating CSV file %s", format(filename))
         self.filehandler = open(filename, "w")
@@ -99,6 +100,7 @@ class CSVWriter:
         filename = self.filename
         LOG.debug("Closing file {}.".format(self.filename))
         self.filehandler.close()
+        self.filehandler = None
         # If no rows have been written to the file, we can remove it.
         if self.lines_written == 0:
             LOG.debug(

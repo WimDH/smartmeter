@@ -54,7 +54,7 @@ class Load:
         self.state_start_time: Optional[float] = None
 
     @property
-    def status(self) -> int:
+    def status(self) -> str:
         """
         Verbose represantation of the state.
         """
