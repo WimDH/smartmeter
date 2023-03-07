@@ -152,3 +152,5 @@ class CSVWriter:
             ):
                 LOG.debug("%s Lines written to CSV file.", self.lines_written)
                 self.close()
+                break
+
