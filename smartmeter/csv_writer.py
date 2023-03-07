@@ -53,7 +53,7 @@ class CSVWriter:
                 + ".csv",
             )
             target_filename = os.path.join(
-                self.path, os.path.split(filename)[1][len(WIP_PREFIX) :]
+                self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
             if not os.path.exists(target_filename):
                 return filename
