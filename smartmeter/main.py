@@ -94,7 +94,7 @@ async def dispatcher(
         try:
             if not msg_q.empty():
                 data = msg_q.get()
-                LOG.debug("Got data from the queue: %s", data)
+                #LOG.debug("Got data from the queue: %s", data)
 
                 if influx:
                     await influx.write(data)
