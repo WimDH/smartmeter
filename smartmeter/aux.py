@@ -196,6 +196,7 @@ class Display:
 
     def __init__(self) -> None:
         """Initialize the display."""
+        LOG.debug("Initalizing display.")
         _i2c = board.I2C()
         self._display = adafruit_ssd1306.SSD1306_I2C(
             width=self.oled_witdh,

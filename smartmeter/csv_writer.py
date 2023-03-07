@@ -109,7 +109,7 @@ class CSVWriter:
             new_filename = os.path.join(
                 self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
-            LOG.debug("Renaming file to {}.".format(new_filename))
+            LOG.info("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)
 
     @property
@@ -148,6 +148,5 @@ class CSVWriter:
                 self.max_age + self.create_time <= monotonic()
                 or self.lines_written == self.max_lines
             ):
-                LOG.info("%s Lines written to CSV file.", self.lines_written)
+                LOG.debug("%s Lines written to CSV file.", self.lines_written)
                 self.close()
-                return
