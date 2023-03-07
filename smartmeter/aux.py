@@ -56,20 +56,17 @@ class Load:
     @property
     def status(self) -> int:
         """
-        Return 0 or 1.
-        0 if the load is off.
-        1 if the load is on.
+        Verbose represantation of the state.
         """
-        state: str = "ON" if self._load.value == 1 else "OFF"
-        return self._load.value
+        return "ON" if self._load.value == 1 else "OFF"
 
     def on(self) -> None:
-        """Switches the load on (set the pin high."""
+        """Switches the load on (set the pin high)."""
         self.state_start_time = monotonic()
         self._load.on()
 
     def off(self) -> None:
-        """Switches the load on (set the pin high."""
+        """Switches the load on (set the pin low)."""
         self.state_start_time = monotonic()
         self._load.off()
 
@@ -119,7 +116,7 @@ class Load:
         ):
             LOG.info(
                 "Switching load %s ON (Injected power: %s, state timer: %s, hold timer: %s)",
-                     self.name, injected, self.state_time, self.hold_timer
+                self.name, injected, self.state_time, self.hold_timer
             )
             self.on()
 
@@ -130,7 +127,7 @@ class Load:
         ):
             LOG.info(
                 "Switching load %s OFF (Consumed power: %s, state timer: %s, hold timer: %s)",
-                     self.name, consumed, self.state_time, self.hold_timer
+                self.name, consumed, self.state_time, self.hold_timer
             )
             self.off()
 
