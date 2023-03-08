@@ -98,8 +98,12 @@ async def dispatcher(
 
                 if influx:
                     await influx.write(data)
+
                 if csv_writer:
                     csv_writer.write(data)
+
+                if loads:
+                    loads.process(data)
 
             else:
                 await asyncio.sleep(0.1)
