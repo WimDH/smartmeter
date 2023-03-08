@@ -16,7 +16,7 @@ try:
 except ImportError:
     pass
 
-LOG = logging.getLogger("main")
+LOG = logging.getLogger()
 
 
 def not_on_a_pi():

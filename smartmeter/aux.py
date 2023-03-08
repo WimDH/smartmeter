@@ -19,7 +19,7 @@ try:
 except ImportError:
     pass
 
-LOG = logging.getLogger(__name__)
+LOG = logging.getLogger()
 TIMER_TYPES = ["consume", "inject"]
 LOAD_PIN = 24
 
