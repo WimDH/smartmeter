@@ -153,10 +153,10 @@ class LoadManager:
         TODO: add support for other loads, that can connect over wifi or bluetooth.
         """
         if not load_config.getboolean("enabled", False):
-            LOG.info("Load {} is not enabled.".format(load_config.name))
+            LOG.info("Load %s is not enabled.", format(load_config.name))
             return
 
-        LOG.info("Added load {}.".format(load_config.name))
+        LOG.info("Added load %s.", load_config.name)
         self.load_list.append(
             Load(
                 name=load_config.name[5:],
