@@ -44,7 +44,7 @@ class Load:
             )  # See pin numbering
             self.gpio_pin = LOAD_PIN
         else:
-            self._load = address
+            self._load = None  # To be replaced with class to magage wireless loads
             self.gpio_pin = None
 
         self.name = name
