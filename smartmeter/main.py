@@ -82,7 +82,7 @@ async def dispatcher(
     msg_q: mp.Queue,
     influx: Optional[DbInflux],
     csv_writer: Optional[CSVWriter],
-    loads: Optional[LoadManager],
+    load_manager: Optional[LoadManager],
 ) -> None:
     """
     Dispatcher gets data from the queue and feeds it to
@@ -102,8 +102,8 @@ async def dispatcher(
                 if csv_writer:
                     csv_writer.write(data)
 
-                if loads:
-                    loads.process(data)
+                if load_manager:
+                    load_manager.process(data)
 
             else:
                 await asyncio.sleep(0.1)
@@ -182,16 +182,15 @@ def run() -> None:
         )
 
     # Get all the loads from the configfile.
-    loads = []
     # Load sections start with 'load:'
     load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
     if load_cfg:
-        loads = LoadManager()
+        load_manager = LoadManager()
         LOG.info("Adding the loads to the loadmanager.")
-        [loads.add_load(l) for l in load_cfg]
+        [load_manager.add_load(l) for l in load_cfg]
 
     eventloop = asyncio.get_event_loop()
-    asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, loads))
+    asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, load_manager))
 
     if not not_on_a_pi():
         asyncio.ensure_future(display())
