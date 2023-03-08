@@ -189,6 +189,7 @@ def run() -> None:
         load_manager = LoadManager()
         LOG.info("Adding the loads to the loadmanager.")
         [load_manager.add_load(l) for l in load_cfg]
+        LOG.debug("%s load added to the load manager.", load_manager.load_cnt)
     else:
         LOG.warning("No loads found in the config file!")
 
