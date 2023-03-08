@@ -154,6 +154,7 @@ class LoadManager:
         """
         if not load_config.getboolean("enabled", False):
             LOG.info("Load {} is not enabled.".format(load_config.name))
+            return
 
         LOG.info("Added load {}.".format(load_config.name))
         self.load_list.append(
