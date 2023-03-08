@@ -183,11 +183,14 @@ def run() -> None:
 
     # Get all the loads from the configfile.
     # Load sections start with 'load:'
+    load_manager = None
     load_cfg = [config[s] for s in config.sections() if s.startswith("load")]
     if load_cfg:
         load_manager = LoadManager()
         LOG.info("Adding the loads to the loadmanager.")
         [load_manager.add_load(l) for l in load_cfg]
+    else:
+        LOG.warning("No loads found in the config file!")
 
     eventloop = asyncio.get_event_loop()
     asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, load_manager))
