@@ -126,7 +126,6 @@ def run() -> None:
         keep=int(config["logging"]["keep"]),
         size=config["logging"]["size"],
         loglevel=config["logging"]["loglevel"],
-        name="main",
     )
 
     log.info("--- Start ---")
