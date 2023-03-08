@@ -91,6 +91,8 @@ def convert_timestamp(timestamp: str, format: Optional[str] = None) -> str:
     else:
         result = f"{year}-{month}-{day} {hour}:{minute}:{second} {tz_zone}"
 
+    LOG.debug("Converted timestamp from %s to %s", timestamp, result)
+
     return result
 
 

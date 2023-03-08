@@ -16,7 +16,7 @@ try:
 except ImportError:
     pass
 
-LOG = logging.getLogger()
+LOG = logging.getLogger("main")
 
 
 def not_on_a_pi():
@@ -126,6 +126,7 @@ def run() -> None:
         keep=int(config["logging"]["keep"]),
         size=config["logging"]["size"],
         loglevel=config["logging"]["loglevel"],
+        name="main",
     )
 
     log.info("--- Start ---")
