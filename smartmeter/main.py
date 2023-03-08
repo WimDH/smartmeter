@@ -129,6 +129,16 @@ def run() -> None:
         name="main",
     )
 
+    init_logging(
+        filename="loadmanager.log",
+        logpath=config["logging"]["logpath"],
+        log_to_stdout=config.getboolean("logging", "log_to_stdout"),
+        keep=int(config["logging"]["keep"]),
+        size=config["logging"]["size"],
+        loglevel=config["logging"]["loglevel"],
+        name="loadmanager",
+    )
+
     log.info("--- Start ---")
 
     if not_on_a_pi():
@@ -188,7 +198,7 @@ def run() -> None:
     if load_cfg:
         load_manager = LoadManager()
         LOG.info("Adding the loads to the loadmanager.")
-        [load_manager.add_load(l) for l in load_cfg]
+        [load_manager.add_load(lds) for lds in load_cfg]
         LOG.debug("%s load added to the load manager.", load_manager.load_cnt)
     else:
         LOG.warning("No loads found in the config file!")
