@@ -111,8 +111,7 @@ async def dispatcher(
             else:
                 await asyncio.sleep(0.1)
 
-        s
-
+        # TODO: add singleton
 
         except Exception:
             LOG.exception("Unexpected error in the dispatcher!")

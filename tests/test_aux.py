@@ -30,6 +30,7 @@ def test_loadmanager_add_load():
     """
     load_cfg = configparser.ConfigParser()
     load_cfg["load:aux"] = {
+        "enabled": True,
         "max_power": "2300",
         "switch_on": "75",
         "switch_off": "10",
@@ -51,6 +52,7 @@ def test_loadmanager_process(consumed, injected, state):
     """
     load_cfg = configparser.ConfigParser()
     load_cfg["load:aux"] = {
+        "enabled": True,
         "max_power": "2300",  # watt
         "switch_on": "1725",  # watt
         "switch_off": "230",  # watt

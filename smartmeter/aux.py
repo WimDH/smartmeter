@@ -108,7 +108,6 @@ class Load:
             LOG.debug("Processing load %s. Injected is %s, consumed is %s.", self.name, injected, consumed)
             LOG.debug("Timers: hold_timer is %s. state_timer is %s %s.", self.name, injected, consumed)
 
-
         if (
             self.is_off
             and injected >= self.max_power
