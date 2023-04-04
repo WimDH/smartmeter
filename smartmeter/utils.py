@@ -2,7 +2,7 @@ import re
 import os
 import argparse
 import configparser
-from typing import List, Union, Optional, Dict, Any
+from typing import List, Union, Optional, Dict
 import logging
 from logging.handlers import RotatingFileHandler
 from coloredlogs import ColoredFormatter
