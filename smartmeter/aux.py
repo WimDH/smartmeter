@@ -2,7 +2,6 @@ import configparser
 import logging
 from typing import Optional, Dict
 from time import monotonic
-from xmlrpc.client import Boolean
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
 
@@ -71,12 +70,12 @@ class Load:
         self._load.off()
 
     @property
-    def is_on(self) -> Boolean:
+    def is_on(self) -> bool:
         """Return True if the load is switched on else False."""
         return True if self._load.value == 1 else False
 
     @property
-    def is_off(self) -> Boolean:
+    def is_off(self) -> bool:
         """Return True is the load is off, else True."""
         return not self.is_on
 
@@ -105,6 +104,10 @@ class Load:
         Return the load state.
         """
         switch_off = 100  # watt
+        if monotonic() % 10 == 0:
+            LOG.debug("Processing load %s. Injected is %s, consumed is %s.", self.name, injected, consumed)
+            LOG.debug("Timers: hold_timer is %s. state_timer is %s %s.", self.name, injected, consumed)
+
 
         if (
             self.is_off
@@ -317,5 +320,5 @@ class StatusLed:
         self.led.blink(on_time=interval, off_time=interval)
 
     @property
-    def status(self) -> Boolean:
+    def status(self) -> bool:
         return self.led.is_active()

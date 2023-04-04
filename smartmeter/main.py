@@ -10,6 +10,9 @@ from smartmeter.digimeter import read_serial, fake_serial
 from smartmeter.influx import DbInflux
 from smartmeter.csv_writer import CSVWriter
 from smartmeter.aux import LoadManager, Display, Buttons
+from smartmeter.utils import Status
+from telegram.ext import Application, CommandHandler
+from smartmeter import telegram_commands
 
 try:
     import gpiozero as gpio
@@ -89,13 +92,13 @@ async def dispatcher(
     the different tasks.
     """
     LOG.debug("Starting dispatcher.")
+    status = Status()  # Status singleton
 
     while True:
         try:
             if not msg_q.empty():
                 data = msg_q.get()
-                # LOG.debug("Got data from the queue: %s", data)
-
+                
                 if influx:
                     await influx.write(data)
 
@@ -103,14 +106,26 @@ async def dispatcher(
                     csv_writer.write(data)
 
                 if load_manager:
-                    load_manager.process(data)
-
+                    result = load_manager.process(data)
+                    
             else:
                 await asyncio.sleep(0.1)
+
+        s
+
 
         except Exception:
             LOG.exception("Unexpected error in the dispatcher!")
             await asyncio.sleep(0.1)
+
+
+async def start_telegram(token: str) -> None:
+    """Telegram integration."""
+    telegram_bot = Application.builder().token(token).build()
+    telegram_bot.add_handler(CommandHandler("status", telegram_commands.status))
+    await telegram_bot.initialize()
+    await telegram_bot.start()
+    await telegram_bot.updater.start_polling()
 
 
 def run() -> None:
@@ -138,6 +153,8 @@ def run() -> None:
         loglevel=config["logging"]["loglevel"],
         name="loadmanager",
     )
+
+    eventloop = asyncio.get_event_loop()
 
     log.info("--- Start ---")
 
@@ -203,7 +220,12 @@ def run() -> None:
     else:
         LOG.warning("No loads found in the config file!")
 
-    eventloop = asyncio.get_event_loop()
+    # Telegram 
+    cfg = config['telegram']
+    if cfg and cfg.getboolean("enabled"):
+        LOG.info("Telegram is enabled.")
+        asyncio.ensure_future(start_telegram(cfg.get("token")))
+
     asyncio.ensure_future(dispatcher(msg_q, influx, csv_writer, load_manager))
 
     if not not_on_a_pi():

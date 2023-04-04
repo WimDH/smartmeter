@@ -134,6 +134,7 @@ class Borg:
 class Status(Borg):
     """An object to cache the latest meter data, various states and measured values."""
 
-    def __init__(self, data: Any) -> None:
-        Borg.__init__(self)
-        self.data = data
+    def __init__(self, load: Dict, meter: Dict) -> None:
+        Borg.__init__(self, load, meter)
+        self.load = load
+        self.meter = meter
