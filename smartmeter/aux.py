@@ -23,6 +23,25 @@ TIMER_TYPES = ["consume", "inject"]
 LOAD_PIN = 24
 
 
+class DummyLoad():
+    """
+    Dummy load.
+    TODO: implement initial state
+    """
+    def __init__(self) -> None:
+        self._status = 0
+
+    def on(self):
+        self._status = 1
+
+    def off(self):
+        self._status = 0
+
+    @property
+    def value(self):
+        return self._status
+
+
 class Load:
     """
     Defines a load.
@@ -42,6 +61,9 @@ class Load:
                 pin=LOAD_PIN, initial_value=False
             )  # See pin numbering
             self.gpio_pin = LOAD_PIN
+        elif address == "dummy":
+            self._load = DummyLoad()  # For testing
+            self.gpio_pin = None
         else:
             self._load = None  # To be replaced with class to magage wireless loads
             self.gpio_pin = None
@@ -60,23 +82,31 @@ class Load:
         return "ON" if self._load.value == 1 else "OFF"
 
     def on(self) -> None:
-        """Switches the load on (set the pin high)."""
+        """
+        Switches the load on (set the pin high).
+        """
         self.state_start_time = monotonic()
         self._load.on()
 
     def off(self) -> None:
-        """Switches the load on (set the pin low)."""
+        """
+        Switches the load on (set the pin low).
+        """
         self.state_start_time = monotonic()
         self._load.off()
 
     @property
     def is_on(self) -> bool:
-        """Return True if the load is switched on else False."""
+        """
+        Return True if the load is switched on else False.
+        """
         return True if self._load.value == 1 else False
 
     @property
     def is_off(self) -> bool:
-        """Return True is the load is off, else True."""
+        """
+        Return True is the load is off, else True.
+        """
         return not self.is_on
 
     @property
@@ -104,17 +134,11 @@ class Load:
         Return the load state.
         """
         switch_off = 100  # watt
-        if monotonic() % 10 == 0:
-            LOG.debug("Processing load %s. Injected is %s, consumed is %s.", self.name, injected, consumed)
-            LOG.debug("Timers: hold_timer is %s. state_timer is %s %s.", self.name, injected, consumed)
 
         if (
-            self.is_off
-            and injected >= self.max_power
-            and (
-                self.state_time is not None
-                and self.state_time > self.hold_timer
-            )
+            self.is_off and
+            injected >= self.max_power and
+            (0 < self.state_time > self.hold_timer)
         ):
             LOG.info(
                 "Switching load %s ON (Injected power: %s, state timer: %s, hold timer: %s)",
@@ -123,9 +147,9 @@ class Load:
             self.on()
 
         elif (
-            self.is_on
-            and consumed > switch_off
-            and self.state_time > self.hold_timer
+            self.is_on and
+            consumed > switch_off and
+            self.state_time > self.hold_timer
         ):
             LOG.info(
                 "Switching load %s OFF (Consumed power: %s, state timer: %s, hold timer: %s)",

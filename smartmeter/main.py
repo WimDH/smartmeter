@@ -106,7 +106,7 @@ async def dispatcher(
                     csv_writer.write(data)
 
                 if load_manager:
-                    result = load_manager.process(data)
+                    load_manager.process(data)
 
             else:
                 await asyncio.sleep(0.1)
@@ -219,7 +219,7 @@ def run() -> None:
     else:
         LOG.warning("No loads found in the config file!")
 
-    # Telegram 
+    # Telegram
     cfg = config['telegram']
     if cfg and cfg.getboolean("enabled"):
         LOG.info("Telegram is enabled.")
