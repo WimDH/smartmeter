@@ -49,7 +49,7 @@ minio==7.1.13
 multidict==6.0.4
 mypy==0.991
 mypy-extensions==0.4.3
-numpy==1.24.2
+numpy
 packaging==23.0
 pathspec==0.11.0
 Pillow==9.4.0
