@@ -98,7 +98,7 @@ async def dispatcher(
         try:
             if not msg_q.empty():
                 data = msg_q.get()
-                
+
                 if influx:
                     await influx.write(data)
 
@@ -107,7 +107,7 @@ async def dispatcher(
 
                 if load_manager:
                     result = load_manager.process(data)
-                    
+
             else:
                 await asyncio.sleep(0.1)
 

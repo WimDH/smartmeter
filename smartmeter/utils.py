@@ -122,19 +122,19 @@ def update_log_config(
     return config["merged"]
 
 
-class Borg:
-    """A Borg Singleton."""
+# class Borg:
+#     """A Borg Singleton."""
 
-    _shared_state: Dict = {}
+#     _shared_state: Dict = {}
 
-    def __init__(self) -> None:
-        self.__dict__ = self._shared_state
+#     def __init__(self) -> None:
+#         self.__dict__ = self._shared_state
 
 
-class Status(Borg):
-    """An object to cache the latest meter data, various states and measured values."""
+# class Status(Borg):
+#     """An object to cache the latest meter data, various states and measured values."""
 
-    def __init__(self, load: Dict, meter: Dict) -> None:
-        Borg.__init__(self, load, meter)
-        self.load = load
-        self.meter = meter
+#     def __init__(self, load: Dict, meter: Dict) -> None:
+#         Borg.__init__(self, load, meter)
+#         self.load = load
+#         self.meter = meter
