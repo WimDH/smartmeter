@@ -92,7 +92,7 @@ async def dispatcher(
     the different tasks.
     """
     LOG.debug("Starting dispatcher.")
-    status = Status()  # Status singleton
+    #status = Status()  # Status singleton
 
     while True:
         try:
