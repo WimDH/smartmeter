@@ -75,7 +75,7 @@ class CSVWriter:
             return
 
         filename = self._generate_filename()
-        LOG.info("Creating CSV file %s", format(filename))
+        LOG.debug("Creating CSV file %s", format(filename))
         self.filehandler = open(filename, "w")
         self.dictwriter = csv.DictWriter(
             self.filehandler, fieldnames=FIELDNAMES, quoting=csv.QUOTE_MINIMAL
@@ -93,7 +93,7 @@ class CSVWriter:
 
         # Write the remainder of the rows.
         if flush is True and len(self.batch) > 0:
-            LOG.debug("Writing the remainder of the rows.")
+            LOG.debug("Writing the remainder (%s lines) to the file.", len(self.batch))
             self.write(flush=True)
 
         filename = self.filename
@@ -109,7 +109,7 @@ class CSVWriter:
             new_filename = os.path.join(
                 self.path, os.path.split(filename)[1][len(WIP_PREFIX):]
             )
-            LOG.info("Renaming file to {}.".format(new_filename))
+            LOG.debug("Renaming file to {}.".format(new_filename))
             os.rename(filename, new_filename)
 
     @property

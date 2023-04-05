@@ -137,7 +137,7 @@ class Load:
 
         LOG.debug(
             "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
-            self.name, injected, consumed, self.max_power, self.hold_timer, self.state_time
+            self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
           )
 
         if (
