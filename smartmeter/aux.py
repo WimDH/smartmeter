@@ -209,7 +209,11 @@ class LoadManager:
         for load in self.load_list:
             injected = data.get("actual_total_injection", 0) * 1000
             consumed = data.get("actual_total_consumption", 0) * 1000
-            load_status[load.name] = load.process(injected, consumed)
+            try:
+                load_status[load.name] = load.process(injected, consumed)
+            except Exception:
+                LOG.exception("Error processing load: %s", load.name)
+                
 
         return load_status
 
