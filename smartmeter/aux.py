@@ -118,7 +118,7 @@ class Load:
         return self.max_power
 
     @property
-    def state_time(self) -> Union[int,None]:
+    def state_time(self) -> Union[int, None]:
         """
         Count how many seconds we are in a stable state (on of off).
         Return -1 if the state is not defined yet.
@@ -161,6 +161,9 @@ class Load:
             self.off()
 
         return self.is_on
+
+    def __repr__(self) -> str:
+        return f"<Load {self.name} - is_on: {self.is_on}, state_time: {self.state_time}s, hold_timer: {self.hold_timer}s."
 
 
 class LoadManager:
