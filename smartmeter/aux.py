@@ -204,6 +204,7 @@ class LoadManager:
         for load in self.load_list:
             injected = data.get("actual_total_injection", 0) * 1000
             consumed = data.get("actual_total_consumption", 0) * 1000
+            LOG.debug("Processed %s, Injected: %s, consumed: %s.", load.name, injected, consumed)
             load_status[load.name] = load.process(injected, consumed)
 
         return load_status
