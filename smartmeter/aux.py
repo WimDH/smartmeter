@@ -1,6 +1,6 @@
 import configparser
 import logging
-from typing import Optional, Dict
+from typing import Optional, Dict, Union
 from time import monotonic
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
@@ -118,15 +118,13 @@ class Load:
         return self.max_power
 
     @property
-    def state_time(self) -> int:
+    def state_time(self) -> Union[int,None]:
         """
         Count how many seconds we are in a stable state (on of off).
         Return -1 if the state is not defined yet.
         """
-        if self.state_start_time is None:
-            return -1
-
-        return int(monotonic() - self.state_start_time)
+        if self.state_start_time:
+            return int(monotonic() - self.state_start_time)
 
     def process(self, injected: int, consumed: int) -> bool:
         """
@@ -135,18 +133,19 @@ class Load:
         """
         switch_off = 100  # watt
 
-        # LOG.debug(
-        #     "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
-        #     self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
-        #   )
+        LOG.debug(
+            "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
+            self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
+          )
 
         if (
             self.is_off and
             injected >= self.max_power and
-            (0 < self.state_time > self.hold_timer)
+            self.state_time is not None and
+            self.state_time > self.hold_timer
         ):
             LOG.info(
-                "Switching load %s ON (Injected power: %s, state timer: %s, hold timer: %s)",
+                "Switching load %s ON (Injected power: %s, state time: %s, hold timer: %s)",
                 self.name, injected, self.state_time, self.hold_timer
             )
             self.on()
@@ -157,7 +156,7 @@ class Load:
             self.state_time > self.hold_timer
         ):
             LOG.info(
-                "Switching load %s OFF (Consumed power: %s, state timer: %s, hold timer: %s)",
+                "Switching load %s OFF (Consumed power: %s, state time: %s, hold timer: %s)",
                 self.name, consumed, self.state_time, self.hold_timer
             )
             self.off()
