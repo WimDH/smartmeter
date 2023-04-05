@@ -135,6 +135,11 @@ class Load:
         """
         switch_off = 100  # watt
 
+        LOG.debug(
+            "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
+            self.name, injected, consumed, self.max_power, self.hold_timer, self.state_time
+          )
+
         if (
             self.is_off and
             injected >= self.max_power and
@@ -204,7 +209,6 @@ class LoadManager:
         for load in self.load_list:
             injected = data.get("actual_total_injection", 0) * 1000
             consumed = data.get("actual_total_consumption", 0) * 1000
-            LOG.debug("Processed %s, Injected: %s, consumed: %s.", load.name, injected, consumed)
             load_status[load.name] = load.process(injected, consumed)
 
         return load_status
