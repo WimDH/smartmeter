@@ -211,7 +211,6 @@ class LoadManager:
             consumed = data.get("actual_total_consumption", 0) * 1000
             load_status[load.name] = load.process(injected, consumed)
 
-        LOG.debug("Load status: %s", load_status)
         return load_status
 
 
