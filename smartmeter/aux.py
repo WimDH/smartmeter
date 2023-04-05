@@ -133,16 +133,15 @@ class Load:
         """
         switch_off = 100  # watt
 
-        LOG.debug(
-            "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
-            self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
-          )
+        # LOG.debug(
+        #     "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
+        #     self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
+        #   )
 
         if (
             self.is_off and
             injected >= self.max_power and
-            self.state_time is not None and
-            self.state_time > self.hold_timer
+            ((self.state_time is not None and self.state_time > self.hold_timer) or self.state_time is None)
         ):
             LOG.info(
                 "Switching load %s ON (Injected power: %s, state time: %s, hold timer: %s)",
