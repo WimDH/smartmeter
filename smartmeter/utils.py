@@ -2,10 +2,11 @@ import re
 import os
 import argparse
 import configparser
-from typing import List, Union, Optional, Dict
+from typing import List, Union, Optional
 import logging
 from logging.handlers import RotatingFileHandler
 from coloredlogs import ColoredFormatter
+from singleton_decorator import singleton
 
 
 def autoformat(value: Union[str, int, float]) -> Union[str, int, float]:
@@ -122,19 +123,9 @@ def update_log_config(
     return config["merged"]
 
 
-class Borg:
-    """A Borg Singleton."""
-
-    _shared_state: Dict = {}
-
-    def __init__(self) -> None:
-        self.__dict__ = self._shared_state
-
-
-class Status(Borg):
-    """An object to cache the latest meter data, various states and measured values."""
-
-    def __init__(self, load: Dict, meter: Dict) -> None:
-        Borg.__init__(self, load, meter)
-        self.load = load
-        self.meter = meter
+@singleton
+class Status():
+    """Shared status data."""
+    system = {}
+    loads = {}
+    meter = {}

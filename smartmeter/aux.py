@@ -4,6 +4,7 @@ from typing import Optional, Dict, Union
 from time import monotonic
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
+from smartmeter.utils import Status
 
 try:
     import board
@@ -162,7 +163,7 @@ class Load:
 
         return self.is_on
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return f"<Load {self.name} - is_on: {self.is_on}, state_time: {self.state_time}s, hold_timer: {self.hold_timer}s."
 
 
@@ -205,6 +206,7 @@ class LoadManager:
         Return the status for each load.
         TODO: define an order for switching all the loads
         """
+        status = Status()
         load_status = {}
 
         for load in self.load_list:
@@ -212,6 +214,7 @@ class LoadManager:
             consumed = data.get("actual_total_consumption", 0) * 1000
             load_status[load.name] = load.process(injected, consumed)
 
+        status.loads = load_status
         return load_status
 
 

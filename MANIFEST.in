@@ -1,0 +1,4 @@
+global-exclude *.py[cod]
+
+include config.sample.ini
+recursive-include tests/testdata/*

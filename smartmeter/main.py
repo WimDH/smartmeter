@@ -10,9 +10,10 @@ from smartmeter.digimeter import read_serial, fake_serial
 from smartmeter.influx import DbInflux
 from smartmeter.csv_writer import CSVWriter
 from smartmeter.aux import LoadManager, Display, Buttons
-from smartmeter.utils import Status
 from telegram.ext import Application, CommandHandler
 from smartmeter import telegram_commands
+from datetime import datetime
+from smartmeter.utils import Status
 
 try:
     import gpiozero as gpio
@@ -92,7 +93,7 @@ async def dispatcher(
     the different tasks.
     """
     LOG.debug("Starting dispatcher.")
-    # status = Status()  # Status singleton
+    #status = Status()
 
     while True:
         try:
@@ -111,7 +112,7 @@ async def dispatcher(
             else:
                 await asyncio.sleep(0.1)
 
-        # TODO: add singleton
+            # a=1
 
         except Exception:
             LOG.exception("Unexpected error in the dispatcher!")
@@ -156,6 +157,8 @@ def run() -> None:
     eventloop = asyncio.get_event_loop()
 
     log.info("--- Start ---")
+    status = Status()
+    status.system["up_since"] = datetime.isoformat(datetime.now())
 
     if not_on_a_pi():
         log.warning(

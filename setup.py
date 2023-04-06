@@ -31,7 +31,6 @@ setup(
     keywords="digital meter, energy, electricity, power control",
     packages=find_packages(where="smartmeter"),
     python_requires=">=3.7",
-    data_files=[("config.sample.ini", ["config.sample.ini"])],
     entry_points={
         "console_scripts": [
             "smartmeter=smartmeter.main:run",
