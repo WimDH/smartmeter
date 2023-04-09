@@ -19,7 +19,7 @@ def generate_status_message() -> str:
         load_stat = "ON" if load_data["state"] else "OFF"
         time_human = human_time_duration(load_data['current_state_time']) if load_data['current_state_time'] else "(no data)"
         output_lines.append(
-            f"load {load_name}: {load_stat} for {time_human}"
+            f"{load_name}: {load_stat} for {time_human}"
         )
 
     output_lines.append("<b>Meter data</b>")
