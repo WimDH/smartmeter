@@ -93,7 +93,7 @@ async def dispatcher(
     the different tasks.
     """
     LOG.debug("Starting dispatcher.")
-    #status = Status()
+    status = Status()
 
     while True:
         try:
@@ -109,10 +109,10 @@ async def dispatcher(
                 if load_manager:
                     load_manager.process(data)
 
+                status.meter = data
+
             else:
                 await asyncio.sleep(0.1)
-
-            # a=1
 
         except Exception:
             LOG.exception("Unexpected error in the dispatcher!")
@@ -200,7 +200,7 @@ def run() -> None:
     csv_writer = None
     cfg = config["csv"]
     if cfg and cfg.getboolean("enabled"):
-        LOG.info("CSVWriter is enabled.")
+        LOG.info("CSV writer is enabled.")
         csv_writer = CSVWriter(
             prefix=cfg.get("file_prefix", "smartmeter"),
             path=cfg.get("file_path"),

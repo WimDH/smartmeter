@@ -8,6 +8,25 @@ from logging.handlers import RotatingFileHandler
 from coloredlogs import ColoredFormatter
 from singleton_decorator import singleton
 
+TIME_DURATION_UNITS = (
+    ('week', 60*60*24*7),
+    ('day', 60*60*24),
+    ('hour', 60*60),
+    ('min', 60),
+    ('sec', 1)
+)
+
+
+def human_time_duration(seconds):
+    if seconds == 0:
+        return '0 sec'
+    parts = []
+    for unit, div in TIME_DURATION_UNITS:
+        amount, seconds = divmod(int(seconds), div)
+        if amount > 0:
+            parts.append('{} {}{}'.format(amount, unit, "" if amount == 1 else "s"))
+    return ', '.join(parts)
+
 
 def autoformat(value: Union[str, int, float]) -> Union[str, int, float]:
     """Convert to str, int or float, based on the content."""
@@ -125,7 +144,9 @@ def update_log_config(
 
 @singleton
 class Status():
-    """Shared status data."""
+    """
+    Shared status data.
+    """
     system = {}
     loads = {}
     meter = {}

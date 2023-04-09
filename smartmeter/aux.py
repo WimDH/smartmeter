@@ -132,12 +132,10 @@ class Load:
         Process the load. Switch the load based on injected or consumed power.
         Return the load state.
         """
-        switch_off = 100  # watt
+        # Consumed power in Watt at which the load swicthes off.
+        switch_off = 100
 
-        # LOG.debug(
-        #     "Load %s: is_off: %s, injected: %s, consumed: %s, max power: %s, hold_timer: %s, state_time: %s",
-        #     self.name, self.is_off, injected, consumed, self.max_power, self.hold_timer, self.state_time
-        #   )
+        previous_state_time = self.state_time
 
         if (
             self.is_off and
@@ -145,7 +143,7 @@ class Load:
             ((self.state_time is not None and self.state_time > self.hold_timer) or self.state_time is None)
         ):
             LOG.info(
-                "Switching load %s ON (Injected power: %s, state time: %s, hold timer: %s)",
+                "Switching load %s ON (injected power: %s, previous state time: %s.)",
                 self.name, injected, self.state_time, self.hold_timer
             )
             self.on()
@@ -156,10 +154,18 @@ class Load:
             self.state_time > self.hold_timer
         ):
             LOG.info(
-                "Switching load %s OFF (Consumed power: %s, state time: %s, hold timer: %s)",
+                "Switching load %s OFF (consumed power: %s, previous state time: %s.)",
                 self.name, consumed, self.state_time, self.hold_timer
             )
             self.off()
+
+        # Update the shared status object.
+        status = Status()
+        status.loads[self.name] = {
+            "state": self.is_on,
+            "current_state_time": self.state_time,
+            "previous_state_time:": previous_state_time
+        }
 
         return self.is_on
 
@@ -206,16 +212,11 @@ class LoadManager:
         Return the status for each load.
         TODO: define an order for switching all the loads
         """
-        status = Status()
-        load_status = {}
 
         for load in self.load_list:
             injected = data.get("actual_total_injection", 0) * 1000
             consumed = data.get("actual_total_consumption", 0) * 1000
-            load_status[load.name] = load.process(injected, consumed)
-
-        status.loads = load_status
-        return load_status
+            load.process(injected, consumed)
 
 
 class Display:
