@@ -9,7 +9,7 @@ from typing import Optional
 from smartmeter.digimeter import read_serial, fake_serial
 from smartmeter.influx import DbInflux
 from smartmeter.csv_writer import CSVWriter
-from smartmeter.aux import LoadManager, Display, Buttons
+from smartmeter.aux import LoadManager, Display, Buttons, StatusLed, CurrentSensors
 from telegram.ext import Application, CommandHandler
 from smartmeter import telegram_commands
 from datetime import datetime
@@ -66,13 +66,16 @@ async def display() -> None:
     disp = Display()
     bttns = Buttons()
     activated = False
+    # data = Status()
 
     while True:
         try:
             if bttns.info_button.is_pressed and not activated:
                 activated = True
                 LOG.debug("Info button is pressed.")
-                await disp.cycle()
+                await disp.cycle(
+
+                )
                 activated = False
 
         except Exception:
@@ -94,11 +97,14 @@ async def dispatcher(
     """
     LOG.debug("Starting dispatcher.")
     status = Status()
+    status_led = StatusLed()
+    current_sensors = CurrentSensors()
 
     while True:
         try:
             if not msg_q.empty():
                 data = msg_q.get()
+                status.meter = data
 
                 if influx:
                     await influx.write(data)
@@ -109,7 +115,12 @@ async def dispatcher(
                 if load_manager:
                     load_manager.process(data)
 
-                status.meter = data
+                if data["actual_total_injected"] > 1.5:
+                    status_led.on
+                else:
+                    status_led.off
+
+            
 
             else:
                 await asyncio.sleep(0.1)
