@@ -96,10 +96,10 @@ async def status_led() -> None:
 
     while True:
 
-        if status.meter.get('actual_total_injection', 0) > injected_power:
+        if not led.status and status.meter.get('actual_total_injection', 0) > injected_power:
             LOG.debug("Switching status led on, injected power > %skW.", injected_power)
             led.on()
-        else:
+        elif led.status and status.meter.get('actual_total_injection', 0) <= injected_power:
             LOG.debug("Switching status led off, injected power <= %skW.", injected_power)
             led.off()
 
