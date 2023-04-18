@@ -85,6 +85,27 @@ async def display() -> None:
         await asyncio.sleep(0.1)
 
 
+async def status_led() -> None:
+    """
+    Activates the status led.
+    """
+    led = StatusLed()
+    status = Status()
+
+    injected_power = 1.5  # Kw
+
+    while True:
+
+        if status.meter.get('actual_total_injection', 0) > injected_power:
+            LOG.debug("Switching status led on, injected power > %skW.", injected_power)
+            led.on()
+        else:
+            LOG.debug("Switching status led off, injected power <= %skW.", injected_power)
+            led.off()
+
+        await asyncio.sleep(0.1)
+
+
 async def dispatcher(
     msg_q: mp.Queue,
     influx: Optional[DbInflux],
@@ -97,8 +118,6 @@ async def dispatcher(
     """
     LOG.debug("Starting dispatcher.")
     status = Status()
-    status_led = StatusLed()
-    current_sensors = CurrentSensors()
 
     while True:
         try:
@@ -114,13 +133,6 @@ async def dispatcher(
 
                 if load_manager:
                     load_manager.process(data)
-
-                if data["actual_total_injected"] > 1.5:
-                    status_led.on
-                else:
-                    status_led.off
-
-            
 
             else:
                 await asyncio.sleep(0.1)
@@ -243,6 +255,8 @@ def run() -> None:
 
     if not not_on_a_pi():
         asyncio.ensure_future(display())
+
+    asyncio.ensure_future(status_led())
 
     eventloop.run_forever()
 
