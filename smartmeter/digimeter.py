@@ -166,8 +166,6 @@ def read_serial(
     """
     global log
     telegram_count: int = 0
-    telegram_pointer: int = 0
-    telegram_last_time = 0
     line: bytes
     start_of_telegram_detected: bool = False
     telegram: bytearray = bytearray()
@@ -227,17 +225,6 @@ def read_serial(
             except Exception:
                 LOG.exception("Uncaught exception while reading from the serial port!")
                 pass
-
-            if (
-                int(time.monotonic()) % 60 == 0
-                and int(time.monotonic()) - telegram_last_time > 5
-            ):
-                LOG.info(
-                    "Received %d telegrams from the digital meter in the last minute.",
-                    telegram_count - telegram_pointer,
-                )
-                telegram_pointer = telegram_count
-                telegram_last_time = int(time.monotonic())
 
             if _quit_after and _quit_after == telegram_count:
                 break

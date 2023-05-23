@@ -91,7 +91,6 @@ async def status_led() -> None:
     """
     led = StatusLed()
     status = Status()
-
     injected_power = 1.5  # Kw
 
     while True:
@@ -116,7 +115,7 @@ async def dispatcher(
     Dispatcher gets data from the queue and feeds it to
     the different tasks.
     """
-    LOG.debug("Starting dispatcher.")
+    LOG.info("Starting dispatcher.")
     status = Status()
 
     while True:
