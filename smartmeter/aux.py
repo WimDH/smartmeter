@@ -144,7 +144,7 @@ class Load:
         ):
             LOG.info(
                 "Switching load %s ON (injected power: %s, previous state time: %s.)",
-                self.name, injected, self.state_time, self.hold_timer
+                self.name, injected, previous_state_time
             )
             self.on()
 
@@ -155,7 +155,7 @@ class Load:
         ):
             LOG.info(
                 "Switching load %s OFF (consumed power: %s, previous state time: %s.)",
-                self.name, consumed, self.state_time, self.hold_timer
+                self.name, consumed, previous_state_time
             )
             self.off()
 
