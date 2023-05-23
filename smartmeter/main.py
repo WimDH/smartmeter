@@ -76,7 +76,7 @@ async def display() -> None:
                 await disp.cycle(
                     data.sensors["current_car"],
                     0,
-                    data.sensors["current_vpp"],
+                    data.sensors["current_vvp"],
                     0
                 )
                 activated = False
