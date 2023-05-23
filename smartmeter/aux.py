@@ -306,7 +306,7 @@ class CurrentSensors:
 
     def vpp_current(self) -> int:
         """Return current produced by the solar panels (vpp)."""
-        return 0
+        return self.current_vvp.value
 
     def load_current(self) -> int:
         """Return the current used by the load."""
