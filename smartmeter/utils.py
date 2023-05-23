@@ -150,3 +150,4 @@ class Status():
     system = {}
     loads = {}
     meter = {}
+    sensors = {}

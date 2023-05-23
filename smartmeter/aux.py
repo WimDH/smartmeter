@@ -306,12 +306,12 @@ class CurrentSensors:
         self.current_car = gpio.MCP3204(channel=1, max_voltage=2.5)
 
     def vpp_current(self) -> int:
-        """Return current produced by the solar panels (PVV)."""
+        """Return current produced by the solar panels (vpp)."""
         return 0
 
     def load_current(self) -> int:
         """Return the current used by the load."""
-        return 0
+        return round(self.current_car * 2.5 / 4096, 2)
 
 
 class Buttons:

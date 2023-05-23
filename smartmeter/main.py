@@ -66,7 +66,7 @@ async def display() -> None:
     disp = Display()
     bttns = Buttons()
     activated = False
-    # data = Status()
+    data = Status()
 
     while True:
         try:
@@ -74,7 +74,10 @@ async def display() -> None:
                 activated = True
                 LOG.debug("Info button is pressed.")
                 await disp.cycle(
-
+                    data.sensors["current_car"],
+                    0,
+                    data.sensors["current_vpp"],
+                    0
                 )
                 activated = False
 
@@ -104,6 +107,15 @@ async def status_led() -> None:
 
         await asyncio.sleep(0.1)
 
+
+async def current_sensors() -> None:
+    """
+    Update the Status sungleton with current information.
+    """
+    status = Status()
+    cs = CurrentSensors()
+    status.sensors["current_car"] = cs.load_current()
+    status.sensors["current_vvp"] = cs.vpp_current()
 
 async def dispatcher(
     msg_q: mp.Queue,
