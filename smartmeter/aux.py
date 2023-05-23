@@ -265,7 +265,6 @@ class Display:
         charging_power: float = 0,
         generated_current: float = 0,
         generated_power: float = 0,
-        charging_cycle: int = 0,
     ) -> None:
         """
         Cycle through all values to display, wait x seconds, and run the loop y times.
@@ -277,7 +276,7 @@ class Display:
         text = [
             f"Charging current:\n{charging_current}A",
             f"Charging power:\n{charging_power}W",
-            f"Charging cycle:\n{charging_cycle}",
+            f"--------------------",
             f"Generated current:\n{generated_current}A",
             f"Generated power:\n{generated_power}W",
         ]
@@ -311,7 +310,7 @@ class CurrentSensors:
 
     def load_current(self) -> int:
         """Return the current used by the load."""
-        return round(self.current_car * 2.5 / 4096, 2)
+        return self.current_car
 
 
 class Buttons:
