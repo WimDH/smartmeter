@@ -108,12 +108,11 @@ async def status_led() -> None:
         await asyncio.sleep(0.1)
 
 
-def read_current_sensors() -> None:
+def read_current_sensors(cs: CurrentSensors) -> None:
     """
     Update the Status sungleton with current information.
     """
     status = Status()
-    cs = CurrentSensors()
     car_value = cs.load_current()
     vpp_value = cs.vpp_current()
     LOG.debug('Reading current sensors - car: %s, vpp: %s', car_value, vpp_value)
@@ -133,6 +132,7 @@ async def dispatcher(
     """
     LOG.info("Starting dispatcher.")
     status = Status()
+    sensors = CurrentSensors()
 
     while True:
         try:
@@ -149,7 +149,7 @@ async def dispatcher(
                 if load_manager:
                     load_manager.process(data)
 
-                read_current_sensors()
+                read_current_sensors(sensors)
 
             else:
                 await asyncio.sleep(0.1)
