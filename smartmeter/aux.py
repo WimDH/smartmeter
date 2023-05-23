@@ -310,7 +310,7 @@ class CurrentSensors:
 
     def load_current(self) -> int:
         """Return the current used by the load."""
-        return self.current_car
+        return self.current_car.value
 
 
 class Buttons:
