@@ -114,8 +114,8 @@ def read_current_sensors() -> None:
     """
     status = Status()
     cs = CurrentSensors()
-    car_value = cs.load_current
-    vpp_value = cs.vpp_current
+    car_value = cs.load_current()
+    vpp_value = cs.vpp_current()
     LOG.debug('Reading current sensors - car: %s, vpp: %s', car_value, vpp_value)
     status.sensors["current_car"] = car_value
     status.sensors["current_vvp"] = vpp_value
