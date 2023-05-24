@@ -275,10 +275,7 @@ class Display:
         cnt = 0
         text = [
             f"Charging current:\n{charging_current}A",
-            f"Charging power:\n{charging_power}W",
-            "--------------------",
             f"Generated current:\n{generated_current}A",
-            f"Generated power:\n{generated_power}W",
         ]
 
         self.display_on()
