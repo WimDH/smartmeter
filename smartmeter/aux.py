@@ -274,14 +274,15 @@ class Display:
         """
         cnt = 0
         text = [
-            f"Charging current:\n{charging_current}A",
-            f"Generated current:\n{generated_current}A",
+            f"Charging current: {charging_current}A",
+            f"Generated current: {generated_current}A",
         ]
 
         self.display_on()
 
         while cnt < nbr:
             for t in text:
+                LOG.debug("Cycle %s: t")
                 self.update_display(text=t)
                 await asyncio.sleep(wait)
             cnt += 1
