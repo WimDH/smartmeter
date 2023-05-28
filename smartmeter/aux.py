@@ -260,7 +260,6 @@ class Display:
     async def cycle(
         self,
         wait: int = 1,
-        nbr: int = 1,
         charging_current: float = 0,
         charging_power: float = 0,
         generated_current: float = 0,
@@ -272,17 +271,11 @@ class Display:
         nbr: how many time to run the loop
         display is turned off at the end of the last cycle
         """
-        cnt = 0
         text = f"Charging current: {charging_current}A\nGenerated current: {generated_current}A"
         LOG.debug('Displaying facts: %s', text)
         self.display_on()
-
-        while cnt < nbr:
-            LOG.debug("Cycle %s: text: %s", cnt, text)
-            self.update_display(text)
-            await asyncio.sleep(wait)
-            cnt += 1
-
+        self.update_display(text)
+        await asyncio.sleep(wait)
         self.display_off()
 
 
