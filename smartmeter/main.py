@@ -74,10 +74,9 @@ async def display() -> None:
                 activated = True
                 LOG.debug("Info button is pressed.")
                 await disp.cycle(
-                    data.sensors["current_car"],
-                    0,
-                    data.sensors["current_vvp"],
-                    0
+                    wait=3,
+                    charging_current=data.sensors["current_car"],
+                    generated_current=data.sensors["current_vvp"],
                 )
                 activated = False
 
@@ -278,8 +277,7 @@ def run() -> None:
 
     if not not_on_a_pi():
         asyncio.ensure_future(display())
-
-    asyncio.ensure_future(status_led())
+        asyncio.ensure_future(status_led())
 
     eventloop.run_forever()
 
