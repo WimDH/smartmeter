@@ -115,11 +115,15 @@ def read_current_sensors(cs: CurrentSensors) -> None:
     """
     Update the Status sungleton with current information.
     """
-    status = Status()
-    car_value = cs.load_current()
-    vpp_value = cs.vpp_current()
-    status.sensors["current_car"] = car_value
-    status.sensors["current_vvp"] = vpp_value
+    try:
+        status = Status()
+        car_value = cs.load_current()
+        vpp_value = cs.vpp_current()
+        status.sensors["current_car"] = car_value
+        status.sensors["current_vvp"] = vpp_value
+
+    except Exception:
+        LOG.exception("Error reading the current sensor values.")
 
 
 async def dispatcher(
