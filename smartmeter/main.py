@@ -73,11 +73,15 @@ async def display() -> None:
             if (bttns.info_button.is_pressed and not activated) or True:
                 activated = True
                 LOG.debug("Info button is pressed.")
-                await disp.cycle(
-                    wait=3,
-                    charging_current=data.sensors["current_car"],
-                    generated_current=data.sensors["current_vvp"],
-                )
+                try:
+                    await disp.cycle(
+                        wait=3,
+                        charging_current=data.sensors["current_car"],
+                        generated_current=data.sensors["current_vvp"],
+                    )
+                except KeyError:
+                    asyncio.sleep(1)
+                    
                 activated = False
 
         except Exception:
