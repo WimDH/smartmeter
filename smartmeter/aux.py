@@ -271,7 +271,7 @@ class Display:
         nbr: how many time to run the loop
         display is turned off at the end of the last cycle
         """
-        text = f"Charging current: {charging_current}A\nGenerated current: {generated_current}A"
+        text = f"Charging current:\n    {charging_current}A\nGenerated current:\n    {generated_current}A\n"
         LOG.debug('Displaying facts: %s', text)
         self.display_on()
         self.update_display(text)
