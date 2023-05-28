@@ -356,4 +356,4 @@ class StatusLed:
 
     @property
     def status(self) -> bool:
-        return self.led.is_active()
+        return self.led.value
