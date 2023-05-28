@@ -97,13 +97,16 @@ async def status_led() -> None:
     injected_power = 1.5  # Kw
 
     while True:
+        try:
+            if not led.status and status.meter.get('actual_total_injection', 0) > injected_power:
+                LOG.debug("Switching status led on, injected power > %skW.", injected_power)
+                led.on()
+            elif led.status and status.meter.get('actual_total_injection', 0) <= injected_power:
+                LOG.debug("Switching status led off, injected power <= %skW.", injected_power)
+                led.off()
 
-        if not led.status and status.meter.get('actual_total_injection', 0) > injected_power:
-            LOG.debug("Switching status led on, injected power > %skW.", injected_power)
-            led.on()
-        elif led.status and status.meter.get('actual_total_injection', 0) <= injected_power:
-            LOG.debug("Switching status led off, injected power <= %skW.", injected_power)
-            led.off()
+        except Exception:
+            LOG.exception("Uncaught exception in buttons co routine!")
 
         await asyncio.sleep(0.1)
 
@@ -115,7 +118,6 @@ def read_current_sensors(cs: CurrentSensors) -> None:
     status = Status()
     car_value = cs.load_current()
     vpp_value = cs.vpp_current()
-    #LOG.debug('Reading current sensors - car: %s, vpp: %s', car_value, vpp_value)
     status.sensors["current_car"] = car_value
     status.sensors["current_vvp"] = vpp_value
 
