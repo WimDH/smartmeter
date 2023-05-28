@@ -70,7 +70,7 @@ async def display() -> None:
 
     while True:
         try:
-            if bttns.info_button.is_pressed and not activated:
+            if (bttns.info_button.is_pressed and not activated) or True:
                 activated = True
                 LOG.debug("Info button is pressed.")
                 await disp.cycle(

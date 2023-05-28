@@ -273,10 +273,7 @@ class Display:
         display is turned off at the end of the last cycle
         """
         cnt = 0
-        text = [
-            f"Charging current: {charging_current}A\nGenerated current: {generated_current}A"
-        ]
-
+        text = f"Charging current: {charging_current}A\nGenerated current: {generated_current}A"
         LOG.debug('Displaying facts: %s', text)
         self.display_on()
 
