@@ -294,7 +294,8 @@ class CurrentSensors:
     @staticmethod
     def u_to_i(value):
         """ Convert measured voltage to current. """
-        return round((int(value * 100) - 55) * 0.000707107, 2)
+        LOG.debug("Catculating current value for %s.", value)
+        return round((abs(int(value * 100) - 55)) * 0.000707107, 2)
 
     def vpp_current(self) -> int:
         """Return current produced by the solar panels (vpp)."""

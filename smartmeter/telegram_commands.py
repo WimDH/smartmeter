@@ -9,6 +9,7 @@ LOG = logging.getLogger("main")
 def generate_status_message() -> str:
     """
     Generate the HTLM for the Telegram answer.
+    TODO: create test
     """
     status = Status()
     output_lines = ["<b>System</b>", f"up since: {status.system['up_since']}"]
