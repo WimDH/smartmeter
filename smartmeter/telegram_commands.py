@@ -34,16 +34,17 @@ def generate_status_message() -> str:
             f"Actual current L1/L2/L3: {status.meter['l1_current']}A/{status.meter['l2_current']}A/{status.meter['l3_current']}A."
         )
 
+        # Sensor data:
+        output_lines.append(
+            "<b>Sensor data</b>",
+            f"Current sensors: Car: {status.sensors['current_car']}A, VVP: {status.sensors['current_vvp']}A."
+        )
+
+        return "\n".join(output_lines)
+
     except Exception:
         LOG.exception("Error building status message!")
-
-    # Sensor data:
-    output_lines.append(
-        "<b>Sensor data</b>",
-        f"Current sensors: Car: {status.sensors['current_car']}A, VVP: {status.sensors['current_vvp']}A."
-    )
-
-    return "\n".join(output_lines)
+        return 'Internal Error!'
 
 
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
