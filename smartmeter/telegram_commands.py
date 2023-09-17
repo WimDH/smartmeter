@@ -32,7 +32,7 @@ def generate_status_message() -> str:
     output_lines.append(
         f"Actual current L1/L2/L3: {status.meter['l1_current']}A/{status.meter['l2_current']}A/{status.meter['l3_current']}A .",
         "<b>Sensor data</b>",
-        f"Current sensors: Car: {status.sensors['current_car']}, VVP: {status.sensors['cuurent_vvp']}"
+        f"Current sensors: Car: {status.sensors['current_car']}A, VVP: {status.sensors['cuurent_vvp']}A."
     )
 
     return "\n".join(output_lines)
