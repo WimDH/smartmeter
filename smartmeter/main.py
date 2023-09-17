@@ -145,6 +145,8 @@ async def dispatcher(
 
     while True:
         try:
+            read_current_sensors(sensors)
+
             if not msg_q.empty():
                 data = msg_q.get()
                 status.meter = data
@@ -157,8 +159,6 @@ async def dispatcher(
 
                 if load_manager:
                     load_manager.process(data)
-
-                read_current_sensors(sensors)
 
             else:
                 await asyncio.sleep(0.1)
