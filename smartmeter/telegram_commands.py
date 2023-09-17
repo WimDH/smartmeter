@@ -35,8 +35,8 @@ def generate_status_message() -> str:
         )
 
         # Sensor data:
+        output_lines.append("<b>Sensor data</b>")
         output_lines.append(
-            "<b>Sensor data</b>",
             f"Current sensors: Car: {status.sensors['current_car']}A, VVP: {status.sensors['current_vvp']}A."
         )
 
