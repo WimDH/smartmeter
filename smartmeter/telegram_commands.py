@@ -40,4 +40,5 @@ def generate_status_message() -> str:
 
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send the status of the application."""
+    LOG.info("Received request to send a status update.")
     await update.message.reply_html(generate_status_message())
