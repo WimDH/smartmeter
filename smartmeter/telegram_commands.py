@@ -44,7 +44,7 @@ def generate_status_message() -> str:
 
     except Exception:
         LOG.exception("Error building status message!")
-        return 'Internal Error!'
+        return 'Internal Error! Check the logfiles.'
 
 
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
