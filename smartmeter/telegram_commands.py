@@ -31,10 +31,10 @@ def generate_status_message() -> str:
             output_lines.append(f"Actual injection: {status.meter['actual_total_injection']} kW.")
 
         output_lines.append(
-            f"Actual current L1/L2/L3: {status.meter['l1_current']}A/{status.meter['l2_current']}A/{status.meter['l3_current']}A ."
+            f"Actual current L1/L2/L3: {status.meter['l1_current']}A/{status.meter['l2_current']}A/{status.meter['l3_current']}A."
         )
 
-    except Exception as e:
+    except Exception:
         LOG.exception("Error building status message!")
 
     # Sensor data:
